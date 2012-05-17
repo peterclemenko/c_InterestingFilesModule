@@ -82,7 +82,7 @@ extern "C"
      * Returning TskModule::FAIL indicates error performing its job. Returning TskModule::STOP
      * is a request to terminate execution of the reporting pipeline.
      *
-     * @returns TskModule::OK on success and TskModule::FAIL on error.
+     * @returns TskModule::OK on success, TskModule::FAIL on error, or TskModule::STOP.
      */
     TskModule::Status TSK_MODULE_EXPORT report()
     {
