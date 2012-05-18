@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="InterestingFilesModule"
-	ProjectGUID="{00E3B0EE-B612-433A-A43E-1CE0B3DE1015}"
+	ProjectGUID="{8F956113-11D2-4288-985D-53CBF84648E0}"
 	RootNamespace="EntropyModule"
 	TargetFrameworkVersion="196613"
 	>
