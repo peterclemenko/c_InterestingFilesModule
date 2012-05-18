@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<INTERESTING_FILES>
+  <!--<INTERESTING_FILE>
+    <DESCRIPTION>find all files with .txt extensions in folders named "dir 2"</DESCRIPTION>
+    <EXTENSION>.txt</EXTENSION>
+    <PATH_KEYWORD>DIR 2</PATH_KEYWORD>
+  </INTERESTING_FILE>
+  <INTERESTING_FILE>
+    <DESCRIPTION>file all files with .jpg extensions</DESCRIPTION>
+    <EXTENSION>.jpg</EXTENSION>
+  </INTERESTING_FILE>
+  <INTERESTING_FILE>
+    <DESCRIPTION>find all files with file name readme.txt</DESCRIPTION>
+    <NAME>readme.txt</NAME>
+  </INTERESTING_FILE>-->
+</INTERESTING_FILES>

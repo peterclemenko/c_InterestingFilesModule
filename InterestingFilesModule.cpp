@@ -9,8 +9,9 @@
  */
 
 /** \file InterestingFiles.cpp
- * This module looks for files matching criteria specified in an interesting 
- * files configuration file.
+ * This module is a reporting module that looks for files matching
+ * criteria specified in an input file. The module posts its findings 
+ * to the blackboard.
  */
 
 // System includes
@@ -31,8 +32,8 @@
 #include "Poco/SAX/InputSource.h"
 #include "Poco/SAX/SAXException.h"
 
-static const char *filename = "interesting_files.xml";
-static string interestingFilesPath;
+static const char *defaultInputFilename = "interesting_files.xml";
+static string inputFilePath;
 
 static std::string escapeWildcard(const std::string &s, char escChar) {
     std::string newS;
@@ -58,42 +59,39 @@ static void addInterestingFilesToBlackboard(string & condition, string & descrip
 extern "C" 
 {
     /**
-     * Module initialization function. Receives a string of intialization arguments, 
-     * typically read by the caller from a pipeline configuration file. 
-     * Returns TskModule::OK or TskModule::FAIL. Returning TskModule::FAIL indicates 
-     * the module is not in an operational state.  
+     * Module initialization function. The initialization arguments string should
+     * provide the path of an input file that defines what files are interesting.
      *
-     * @param args Initialization arguments.
+     * @param args Path of the input file that defines what files are interesting.
      * @return TskModule::OK if initialization succeeded, otherwise TskModule::FAIL.
      */
     TskModule::Status TSK_MODULE_EXPORT initialize(std::string& args)
     {
         if (!args.empty()) {
             std::wstringstream msg;
-            msg << L"InterestingFiles: Initialize with argument: " << TskUtilities::toUTF16(args);
+            msg << L"InterestingFiles: Initialized with argument: " << TskUtilities::toUTF16(args);
             LOGINFO(msg.str().c_str());
-            interestingFilesPath = args;
+            inputFilePath = args;
         }
         return TskModule::OK;
     }
     
     /**
-     * Module execution function. Returns TskModule::OK, TskModule::FAIL, or TskModule::STOP. 
-     * Returning TskModule::FAIL indicates error performing its job. Returning TskModule::STOP
-     * is a request to terminate execution of the reporting pipeline.
+     * Module execution function. Looks for files matching criteria specified in an 
+     * input file and posts its findings to the blackboard.
      *
-     * @returns TskModule::OK on success, TskModule::FAIL on error, or TskModule::STOP.
+     * @returns Returns TskModule::FAIL if an error occurs, TskModule::OK otherwise.
      */
     TskModule::Status TSK_MODULE_EXPORT report()
     {
-        LOGINFO(L"InterestingFiles - report started.");
-        if (!interestingFilesPath.length()) {
+        LOGINFO(L"InterestingFiles - search started.");
+        if (!inputFilePath.length()) {
             // Path not provided via args, look for the interesting files config file in the output directory.
-            interestingFilesPath = TskUtilities::toUTF8(TSK_SYS_PROP_GET(TskSystemProperties::OUT_DIR));
-            interestingFilesPath.append("\\");
-            interestingFilesPath.append(filename);
+            inputFilePath = TskUtilities::toUTF8(TSK_SYS_PROP_GET(TskSystemProperties::OUT_DIR));
+            inputFilePath.append("\\");
+            inputFilePath.append(defaultInputFilename);
         }
-        Poco::File file = Poco::File(interestingFilesPath);
+        Poco::File file = Poco::File(inputFilePath);
         std::ifstream in(file.path().c_str());
 
         if (in) {
@@ -124,7 +122,7 @@ extern "C"
                                     name = pNode->innerText();
                                 } else {
                                     // duplicated NAME
-                                    msg << L"Multiple NAME specified in interesting_files.xml: " << name.c_str() << " and " << pNode->innerText().c_str();
+                                    msg << L"Multiple NAME specified in input file: " << name.c_str() << " and " << pNode->innerText().c_str();
                                     LOGERROR(msg.str());
                                     return TskModule::FAIL;
                                 }
@@ -133,7 +131,7 @@ extern "C"
                                     extension = pNode->innerText();
                                 } else {
                                     // duplicated EXTENSION
-                                    msg << L"Multiple EXTENSION specified in interesting_files.xml: " << extension.c_str() << " and " << pNode->innerText().c_str();
+                                    msg << L"Multiple EXTENSION specified in input file: " << extension.c_str() << " and " << pNode->innerText().c_str();
                                     LOGERROR(msg.str());
                                     return TskModule::FAIL;
                                 }
@@ -144,19 +142,19 @@ extern "C"
                                     pathKeyword = pNode->innerText();
                                 } else {
                                     // duplicated PATH_KEYWORD
-                                    msg << L"Multiple PATH_KEYWORD specified in interesting_files.xml: " << pathKeyword.c_str() << " and " << pNode->innerText().c_str();
+                                    msg << L"Multiple PATH_KEYWORD specified in input file: " << pathKeyword.c_str() << " and " << pNode->innerText().c_str();
                                     LOGERROR(msg.str());
                                     return TskModule::FAIL;
                                 }
                             } else {
-                                msg << L"Unknown element specified in interesting_files.xml: " << tag.c_str();
+                                msg << L"Unknown element specified in input file: " << tag.c_str();
                                 LOGERROR(msg.str());
                                 return TskModule::FAIL;
                             }
 
                             // Cannot have both NAME and EXTENSION
                             if (name != "" && extension != "") {
-                                msg << L"Cannot specify both NAME and EXTENSION in interesting_files.xml: " << name.c_str() << " and " << extension.c_str();
+                                msg << L"Cannot specify both NAME and EXTENSION in input file: " << name.c_str() << " and " << extension.c_str();
                                 LOGERROR(msg.str());
                                 return TskModule::FAIL;
                             }
@@ -196,7 +194,7 @@ extern "C"
             }
             catch (Poco::XML::SAXParseException& ex) {
                 std::wstringstream msg;
-                msg << L"InterestingFiles - Error parsing interesting_files.xml: " << ex.message().c_str();
+                msg << L"InterestingFiles - Error parsing input file: " << ex.message().c_str();
                 LOGERROR(msg.str());
                 return TskModule::FAIL;
             }
@@ -208,9 +206,9 @@ extern "C"
                 return TskModule::FAIL;
             }
         } else {
-            // Failed to find interesting files config file.
+            // Failed to find interesting files input file.
             wstringstream msg;
-            msg << L"InterestingFiles - Cannot open file: " << file.path().c_str();
+            msg << L"InterestingFiles - Cannot open input file: " << file.path().c_str();
             LOGERROR(msg.str());
             return TskModule::FAIL;
         }
@@ -218,10 +216,10 @@ extern "C"
     }
 
     /**
-     * Module cleanup function. This is where the module should free any resources 
+     * Module cleanup function. This module does not need to free any resources 
      * allocated during initialization or execution.
      *
-     * @returns TskModule::OK on success and TskModule::FAIL on error.
+     * @returns TskModule::OK
      */
     TskModule::Status TSK_MODULE_EXPORT finalize()
     {
