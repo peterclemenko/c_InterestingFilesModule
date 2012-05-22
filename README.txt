@@ -8,8 +8,9 @@ This module is for the C++ Sleuth Kit Framework.
 
 MODULE DESCRIPTION
 
-This module is a post-processing module that looks for files matching criteria
-specified in an input file. The module posts its findings to the blackboard.
+The interesting file module is a post-processing module that looks for files 
+matching criteria specified in a module configuration file. The module posts 
+its findings to the blackboard. 
 
 MODULE USAGE
 
