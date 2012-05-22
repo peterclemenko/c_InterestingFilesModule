@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <INTERESTING_FILES>
   <!--<INTERESTING_FILE>
-    <DESCRIPTION>find all files with .txt extensions in folders named "dir 2"</DESCRIPTION>
-    <EXTENSION>.txt</EXTENSION>
+    <DESCRIPTION>find all files in folders named "dir 2"</DESCRIPTION>
     <PATH_KEYWORD>DIR 2</PATH_KEYWORD>
   </INTERESTING_FILE>
   <INTERESTING_FILE>
