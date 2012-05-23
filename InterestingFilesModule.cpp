@@ -9,19 +9,8 @@
  */
 
 /** \file InterestingFiles.cpp
- * Contains the implementation of the interesting files post-processing module.
- * MODULE DESCRIPTION
- * 
  * This module is a post-processing module that looks for files matching criteria
  * specified in an input file. The module posts its findings to the blackboard.
- * 
- * MODULE USAGE
- * 
- * Configure the post-processing pipeline to include this module by adding a 
- * "MODULE" element to the pipeline configuration file. Set the "arguments" 
- * attribute of the "MODULE" element to pass the path of an input file as a 
- * module arguments string. A sample input file is provided with the module
- * source code (interesting_files.xml).
  */
 
 // System includes
@@ -185,16 +174,15 @@ extern "C"
                     condition = "WHERE ";
                     if (name != "") {
                         condition += "UPPER(name) = UPPER(" +  TskServices::Instance().getImgDB().quote(name) + ")";
-                        if (pathKeyword != "") {
-                            condition += " AND UPPER(full_path) like UPPER('%" + escapeWildcard(pathKeyword, escChar) + "%' ESCAPE '#')";
-                        }
                         condition += " ORDER BY file_id";
                         addInterestingFilesToBlackboard(condition, description);
                     } else if (extension != "") {
                         condition += "UPPER(name) like UPPER('%" + escapeWildcard(extension, escChar) + "')";
-                        if (pathKeyword != "") {
-                            condition += " AND UPPER(full_path) like UPPER('%" + escapeWildcard(pathKeyword, escChar) + "%')";
-                        }
+                        condition += " ESCAPE '#' ORDER BY file_id";
+                        addInterestingFilesToBlackboard(condition, description);
+                    }
+                    else if (pathKeyword != "") {
+                        condition += "UPPER(full_path) like UPPER('%" + escapeWildcard(pathKeyword, escChar) + "%')";
                         condition += " ESCAPE '#' ORDER BY file_id";
                         addInterestingFilesToBlackboard(condition, description);
                     }

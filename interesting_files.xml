@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <INTERESTING_FILES>
   <!--<INTERESTING_FILE>
-    <DESCRIPTION>find all files in folders named "dir 2"</DESCRIPTION>
-    <PATH_KEYWORD>DIR 2</PATH_KEYWORD>
+    <DESCRIPTION>Suspicious folder name</DESCRIPTION>
+    <PATH_KEYWORD>DIR2</PATH_KEYWORD>
   </INTERESTING_FILE>
   <INTERESTING_FILE>
-    <DESCRIPTION>file all files with .jpg extensions</DESCRIPTION>
+    <DESCRIPTION>JPEG Files</DESCRIPTION>
     <EXTENSION>.jpg</EXTENSION>
   </INTERESTING_FILE>
   <INTERESTING_FILE>
-    <DESCRIPTION>find all files with file name readme.txt</DESCRIPTION>
+    <DESCRIPTION>Suspicious text document</DESCRIPTION>
     <NAME>readme.txt</NAME>
   </INTERESTING_FILE>-->
 </INTERESTING_FILES>
