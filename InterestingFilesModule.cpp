@@ -121,7 +121,7 @@ extern "C"
                                     name = pNode->innerText();
                                 } else {
                                     // duplicated NAME
-                                    msg << L"Multiple NAME specified in input file: " << name.c_str() << " and " << pNode->innerText().c_str();
+                                    msg << L"InterestingFiles: Multiple NAME specified in input file: " << name.c_str() << " and " << pNode->innerText().c_str();
                                     LOGERROR(msg.str());
                                     return TskModule::FAIL;
                                 }
@@ -130,7 +130,7 @@ extern "C"
                                     extension = pNode->innerText();
                                 } else {
                                     // duplicated EXTENSION
-                                    msg << L"Multiple EXTENSION specified in input file: " << extension.c_str() << " and " << pNode->innerText().c_str();
+                                    msg << L"InterestingFiles: Multiple EXTENSION specified in input file: " << extension.c_str() << " and " << pNode->innerText().c_str();
                                     LOGERROR(msg.str());
                                     return TskModule::FAIL;
                                 }
@@ -141,12 +141,12 @@ extern "C"
                                     pathKeyword = pNode->innerText();
                                 } else {
                                     // duplicated PATH_KEYWORD
-                                    msg << L"Multiple PATH_KEYWORD specified in input file: " << pathKeyword.c_str() << " and " << pNode->innerText().c_str();
+                                    msg << L"InterestingFiles: Multiple PATH_KEYWORD specified in input file: " << pathKeyword.c_str() << " and " << pNode->innerText().c_str();
                                     LOGERROR(msg.str());
                                     return TskModule::FAIL;
                                 }
                             } else {
-                                msg << L"Unknown element specified in input file: " << tag.c_str();
+                                msg << L"InterestingFiles: Unknown element specified in input file: " << tag.c_str();
                                 LOGERROR(msg.str());
                                 return TskModule::FAIL;
                             }
@@ -154,15 +154,15 @@ extern "C"
                     } 
 
                     wstringstream msg;
-                    msg << "NAME=" << name.c_str() 
+                    msg << "InterestingFiles: Rule: NAME=" << name.c_str() 
                         << " EXTENSION=" << extension.c_str()
-                        << " PATH_KEYWORD=" << pathKeyword.c_str() 
+                        //<< " PATH_KEYWORD=" << pathKeyword.c_str() 
                         << " DESCRIPTION=" << description.c_str();
                     LOGINFO(msg.str());
 
                     // Cannot have both NAME and EXTENSION
                     if (name != "" && extension != "") {
-                        msg << L"Cannot specify both NAME and EXTENSION in input file: " << name.c_str() << " and " << extension.c_str();
+                        msg << L"InterestingFiles: Cannot specify both NAME and EXTENSION in input file: " << name.c_str() << " and " << extension.c_str();
                         LOGERROR(msg.str());
                         return TskModule::FAIL;
                     }
