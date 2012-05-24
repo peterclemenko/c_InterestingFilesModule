@@ -174,16 +174,16 @@ extern "C"
                     condition = "WHERE ";
                     if (name != "") {
                         condition += "UPPER(name) = UPPER(" +  TskServices::Instance().getImgDB().quote(name) + ")";
-                        condition += " ORDER BY file_id";
                         addInterestingFilesToBlackboard(condition, description);
                     } else if (extension != "") {
                         condition += "UPPER(name) like UPPER('%" + escapeWildcard(extension, escChar) + "')";
-                        condition += " ESCAPE '#' ORDER BY file_id";
+                        condition += " ESCAPE '#'";
+                        //printf("Searching for: %s\n", condition.c_str());
                         addInterestingFilesToBlackboard(condition, description);
                     }
                     else if (pathKeyword != "") {
                         condition += "UPPER(full_path) like UPPER('%" + escapeWildcard(pathKeyword, escChar) + "%')";
-                        condition += " ESCAPE '#' ORDER BY file_id";
+                        condition += " ESCAPE '#'";
                         addInterestingFilesToBlackboard(condition, description);
                     }
                 }
@@ -198,7 +198,7 @@ extern "C"
             }
             catch (TskException& ex) {
                 std::wstringstream errorMsg;
-                errorMsg << L"InterestingFiles - Error creating XML Document: "
+                errorMsg << L"InterestingFiles - Error parsing XML Document or doing search: "
                          << ex.message().c_str() ;
                 LOGERROR(errorMsg.str());
                 return TskModule::FAIL;
