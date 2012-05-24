@@ -150,13 +150,6 @@ extern "C"
                                 LOGERROR(msg.str());
                                 return TskModule::FAIL;
                             }
-
-                            // Cannot have both NAME and EXTENSION
-                            if (name != "" && extension != "") {
-                                msg << L"Cannot specify both NAME and EXTENSION in input file: " << name.c_str() << " and " << extension.c_str();
-                                LOGERROR(msg.str());
-                                return TskModule::FAIL;
-                            }
                         } 
                     } 
 
@@ -166,6 +159,13 @@ extern "C"
                         << " PATH_KEYWORD=" << pathKeyword.c_str() 
                         << " DESCRIPTION=" << description.c_str();
                     LOGINFO(msg.str());
+
+                    // Cannot have both NAME and EXTENSION
+                    if (name != "" && extension != "") {
+                        msg << L"Cannot specify both NAME and EXTENSION in input file: " << name.c_str() << " and " << extension.c_str();
+                        LOGERROR(msg.str());
+                        return TskModule::FAIL;
+                    }
 
                     // Now search for files in database
                     string condition;
@@ -181,11 +181,19 @@ extern "C"
                         //printf("Searching for: %s\n", condition.c_str());
                         addInterestingFilesToBlackboard(condition, description);
                     }
+                    else {
+                        std::wstringstream msg;
+                        msg << L"InterestingFiles - Skipping rule because NAME or EXTENSION were not specified";
+                        LOGERROR(msg.str());
+                        continue;
+                    }
+                    /*  REMOVING while we figure out the exact behavior we want
                     else if (pathKeyword != "") {
                         condition += "UPPER(full_path) like UPPER('%" + escapeWildcard(pathKeyword, escChar) + "%')";
                         condition += " ESCAPE '#'";
                         addInterestingFilesToBlackboard(condition, description);
                     }
+                    */
                 }
 
                 return TskModule::OK;
