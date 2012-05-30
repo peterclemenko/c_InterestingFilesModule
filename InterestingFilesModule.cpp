@@ -57,6 +57,45 @@ static void addInterestingFilesToBlackboard(string & condition, string & descrip
 
 extern "C" 
 {
+    #ifdef _MSC_VER
+        #pragma warning( push )
+        #pragma warning( disable: 4190 )
+    #endif
+ 
+    /**
+     * Module identification function. 
+     *
+     * @return The name of the module as a std::string.
+     */
+    std::string name()
+    {
+        return "InterestingFiles";
+    }
+
+    /**
+     * Module identification function. 
+     *
+     * @return A description of the module as a std::string.
+     */
+    std::string description()
+    {
+        return "";
+    }
+
+    /**
+     * Module identification function. 
+     *
+     * @return The version of the module as a std::string.
+     */
+    std::string version()
+    {
+        return "0.0.0";
+    }
+
+    #ifdef _MSC_VER
+        #pragma warning( pop )
+    #endif
+
     /**
      * Module initialization function. The initialization arguments string should
      * provide the path of an input file that defines what files are interesting.
