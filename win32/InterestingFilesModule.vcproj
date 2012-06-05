@@ -174,14 +174,6 @@
 				>
 			</File>
 		</Filter>
-		<Filter
-			Name="Resource Files"
-			>
-			<File
-				RelativePath="..\interesting_files.xml"
-				>
-			</File>
-		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

@@ -58,14 +58,46 @@ static void addInterestingFilesToBlackboard(string & condition, string & descrip
 extern "C" 
 {
     /**
+     * Module identification function. 
+     *
+     * @return The name of the module as a std::string.
+     */
+    const char* name()
+    {
+        return "InterestingFiles";
+    }
+
+    /**
+     * Module identification function. 
+     *
+     * @return A description of the module as a std::string.
+     */
+    const char* description()
+    {
+        return "";
+    }
+
+    /**
+     * Module identification function. 
+     *
+     * @return The version of the module as a std::string.
+     */
+    const char* version()
+    {
+        return "0.0.0";
+    }
+
+    /**
      * Module initialization function. The initialization arguments string should
      * provide the path of an input file that defines what files are interesting.
      *
      * @param args Path of the input file that defines what files are interesting.
      * @return TskModule::OK if initialization succeeded, otherwise TskModule::FAIL.
      */
-    TskModule::Status TSK_MODULE_EXPORT initialize(std::string& args)
+    TskModule::Status TSK_MODULE_EXPORT initialize(const char*  arguments)
     {
+        std::string args(arguments);
+
         if (!args.empty()) {
             std::wstringstream msg;
             msg << L"InterestingFiles: Initialized with argument: " << TskUtilities::toUTF16(args);
