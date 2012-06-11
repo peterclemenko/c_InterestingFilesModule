@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <INTERESTING_FILES>
-  <INTERESTING_FILE>
-    <DESCRIPTION>Suspicious folder name</DESCRIPTION>
-    <NAME>/DIR2/</NAME>
-  </INTERESTING_FILE>
-  <INTERESTING_FILE>
-    <DESCRIPTION>Suspicious text document</DESCRIPTION>
-    <NAME>readme.txt</NAME>
-  </INTERESTING_FILE>
-  <INTERESTING_FILE>
-    <DESCRIPTION>JPEG Files</DESCRIPTION>
-    <EXTENSION>.jpg</EXTENSION>
-  </INTERESTING_FILE>
-  <INTERESTING_FILE>
-    <DESCRIPTION>Text Files</DESCRIPTION>
-    <EXTENSION>.txt</EXTENSION>
-  </INTERESTING_FILE>
+    <INTERESTING_FILE_SET name="TextFiles" description="Files named file.htm or file.html">
+        <NAME typeFilter="file">file.htm</NAME>
+        <NAME typeFilter="file">file.html</NAME>
+    </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="TextFiles" description="Files with .txt extensions">
+        <EXTENSION typeFilter="file">.txt</EXTENSION>
+    </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="JPEGFiles" description="JPEG files">
+        <EXTENSION typeFilter="file">.jpg</EXTENSION>
+        <EXTENSION typeFilter="file">.jpeg</EXTENSION>
+    </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="SuspiciousFolders" description="Contents of suspicious folders">
+        <NAME typeFilter="dir">/DIR1/</NAME>
+        <NAME typeFilter="dir">/DIR2/</NAME>
+      </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="SuspiciousDocs" description="Suspicious files">
+        <NAME typeFilter="file">readme.txt</NAME>
+        <NAME typeFilter="file" pathFilter="installer\installs">install.doc</NAME>
+        <EXTENSION>.bak</EXTENSION>
+    </INTERESTING_FILE_SET>
 </INTERESTING_FILES>
