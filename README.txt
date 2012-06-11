@@ -8,11 +8,11 @@ This module is for the C++ Sleuth Kit Framework.
 
 DESCRIPTION
 
-This module is a post-processing module that looks for files 
+This module is a post-processing module that looks for files
 matching criteria specified in a module configuration file. 
-The criteria can specify the file or directory's name, extension,
-or path.  This module is useful for identify all files of a given
-type (based on extension) or ceratin names. 
+This module is useful for identifying all files of a given
+type (based on extension) or given name or contained in a 
+directory of a given name. 
 
 
 USAGE
@@ -24,25 +24,66 @@ to the pipeline:
     http://www.sleuthkit.org/sleuthkit/docs/framework-docs/
 
 The module takes the path to the configuration file as an argument. 
-The configuration file is XML and defines the rules to search for. 
+The configuration file is an XML document that defines interesting
+file sets in terms of search criteria.  Here is a sample: 
 
-The schema has the following elements that define the search. Searches
-are done case insensitive.
-* EXTENSION: Search the end of file names for this string.  The "." is
-optional, but if you do not provide it then a the string "jpg" will match
-the file "ajpg". 
-* NAME: Search the file names for a file or directory that matches this
-string. It must be an exact length, case insensitive match. For example, 
-the string "bomb" will not match "abomb". 
+<?xml version="1.0" encoding="utf-8"?>
+<INTERESTING_FILES>
+    <INTERESTING_FILE_SET name="TextFiles" description="Files named file.htm or file.html">
+        <NAME typeFilter="file">file.htm</NAME>
+        <NAME typeFilter="file">file.html</NAME>
+    </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="TextFiles" description="Files with .txt extensions">
+        <EXTENSION typeFilter="file">.txt</EXTENSION>
+    </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="JPEGFiles" description="JPEG files">
+        <EXTENSION typeFilter="file">.jpg</EXTENSION>
+        <EXTENSION typeFilter="file">.jpeg</EXTENSION>
+    </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="SuspiciousFolders" description="Contents of suspicious folders">
+        <NAME typeFilter="dir">/DIR1/</NAME>
+        <NAME typeFilter="dir">/DIR2/</NAME>
+      </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="SuspiciousDocs" description="Suspicious files">
+        <NAME typeFilter="file">readme.txt</NAME>
+        <NAME typeFilter="file" pathFilter="installer\installs">install.doc</NAME>
+        <EXTENSION>.bak</EXTENSION>
+    </INTERESTING_FILE_SET>
+</INTERESTING_FILES>
 
-The DESCRIPTION element can be defined for each search criteria and its
-intended use is to describe why the search is important.  It could let
-the end user know what next step to take if this search is successful.
+Each 'INTERESTING_FILE_SET' element must be given a unique name using its
+'name' attribute.  If this attribute is omitted, the module generates a 
+default name (e.g., Unamed_1, Unamed_2, etc.). 
+
+The 'description' attribute of 'INTERESTING_FILE_SET' element is optional.  
+Its intended use is to describe why the search is important.  It could 
+let the end user know what next step to take if this search is successful.
+
+Each 'INTERESTING_FILE_SET' element may contain any number of 'NAME' and/or 
+'EXTENSION' elements.
+
+A 'NAME' element says search the file names for a file or directory with a 
+name that matches the element text.  The match must be an exact length, 
+case insensitive match.  For example, the string "bomb" will not match "abomb". 
+
+An 'EXTENSION' element says search the end of file names for the element text. 
+If the leading "." is omitted the module will add it. 
+
+'NAME' and 'EXTENSION' elements may be qualified with optional 'typeFilter'
+attributes. Valid values for 'typeFilter' are 'file' (for regular files) and 
+'dir' (for directories).  If no 'typeFilter' is specified, directories and
+*any* type of file are valid matches.  For example, in the sample above, the
+search named "SuspiciousFiles" will find files and directories that end in
+".bak", including files and directories named ".bak". 
+
+'NAME' and 'EXTENSION' elements may be qualified with optional 'pathFilter'
+attributes. Matches with this filter must contain the specified string as
+a sub-string of the file or directory path.
 
 
 RESULTS
 
-The result of the lookup is written to an attribute in the blackboard. 
+The result of the lookup is written to the blackboard as an artifact. 
 You can use the SaveInterestingFiles module to save the identified 
 files to a local directory. 
 
