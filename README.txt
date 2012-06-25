@@ -29,7 +29,7 @@ file sets in terms of search criteria.  Here is a sample:
 
 <?xml version="1.0" encoding="utf-8"?>
 <INTERESTING_FILES>
-    <INTERESTING_FILE_SET name="TextFiles" description="Files named file.htm or file.html">
+    <INTERESTING_FILE_SET name="HTMLFiles" description="Files named file.htm or file.html">
         <NAME typeFilter="file">file.htm</NAME>
         <NAME typeFilter="file">file.html</NAME>
     </INTERESTING_FILE_SET>
