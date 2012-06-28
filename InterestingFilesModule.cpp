@@ -349,7 +349,7 @@ extern "C"
         {
             // Assume use of a config file with a default name in a default location.
             std::stringstream pathBuilder;
-            pathBuilder << TskUtilities::toUTF8(TSK_SYS_PROP_GET(TskSystemProperties::OUT_DIR)) << "\\interesting_files.xml";
+            pathBuilder << GetSystemProperty(TskSystemProperties::OUT_DIR) << Poco::Path::separator() << "interesting_files.xml";
             configFilePath = pathBuilder.str();
         }
 
