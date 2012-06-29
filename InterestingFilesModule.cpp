@@ -138,6 +138,7 @@ namespace
             std::stringstream conditionBuilder;
             conditionBuilder << "WHERE UPPER(name) = UPPER(" +  TskServices::Instance().getImgDB().quote(name) + ")";
             addPathAndTypeFilterOptions(conditionDefinition, conditionBuilder);
+            conditionBuilder << " ORDER BY file_id";
             conditions.push_back(conditionBuilder.str());
         }
     }
@@ -157,6 +158,7 @@ namespace
             std::stringstream conditionBuilder;
             conditionBuilder << "WHERE UPPER(name) LIKE UPPER('%" << addEscapesToPattern(extension) << "') ESCAPE '#' ";
             addPathAndTypeFilterOptions(conditionDefinition, conditionBuilder);            
+            conditionBuilder << " ORDER BY file_id";
             conditions.push_back(conditionBuilder.str());
         }
     }
