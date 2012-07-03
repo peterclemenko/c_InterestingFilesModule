@@ -313,7 +313,7 @@ extern "C"
      */
     TSK_MODULE_EXPORT const char *description()
     {
-        return "";
+        return "Looks for files matching criteria specified in a module configuration file";
     }
 
     /**
