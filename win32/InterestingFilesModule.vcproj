@@ -83,7 +83,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir &quot;$(OutDir)\InterestingFilesModule&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)..\interesting_files.xml&quot; &quot;$(OutDir)\InterestingFilesModule\&quot;&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(OutDir)\$(InputName)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)..\interesting_files.xml&quot; &quot;$(OutDir)\$(InputName)\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -157,7 +157,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir &quot;$(OutDir)\InterestingFilesModule&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)..\interesting_files.xml&quot; &quot;$(OutDir)\InterestingFilesModule\&quot;&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(OutDir)\$(InputName)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)..\interesting_files.xml&quot; &quot;$(OutDir)\$(InputName)\&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

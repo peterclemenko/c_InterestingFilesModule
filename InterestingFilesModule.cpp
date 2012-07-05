@@ -303,7 +303,7 @@ extern "C"
      */
     TSK_MODULE_EXPORT const char *name()
     {
-        return "InterestingFiles";
+        return "InterestingFilesModule";
     }
 
     /**
