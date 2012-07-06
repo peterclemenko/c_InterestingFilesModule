@@ -351,7 +351,7 @@ extern "C"
         {
             // Assume use of a config file with a default name in a default location.
             std::stringstream pathBuilder;
-            pathBuilder << GetSystemProperty(TskSystemProperties::OUT_DIR) << Poco::Path::separator() << "interesting_files.xml";
+            pathBuilder << GetSystemProperty(TskSystemProperties::MODULE_DIR) << Poco::Path::separator() << "InterestingFilesModule" << Poco::Path::separator() << "interesting_files.xml";
             configFilePath = pathBuilder.str();
         }
 
