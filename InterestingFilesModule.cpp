@@ -84,45 +84,45 @@ namespace
             for (unsigned long i = 0; i < attributes->length(); ++i)
             {
                 Poco::XML::Node *attribute = attributes->item(i);
-                const std::string& name = Poco::XML::fromXMLString(attribute->nodeName());
-                const std::string &value = Poco::XML::fromXMLString(attribute->nodeValue());
-                if (!value.empty())
+                const std::string& attributeName = Poco::XML::fromXMLString(attribute->nodeName());
+                const std::string &attributeValue = Poco::XML::fromXMLString(attribute->nodeValue());
+                if (!attributeValue.empty())
                 {
-                    if (name == "pathFilter")
+                    if (attributeName == "pathFilter")
                     {        
                         // File must include a specified substring in its path.
-                        conditionBuilder << " AND UPPER(full_path) LIKE UPPER('%" + addEscapesToPattern(value) + "%') ESCAPE '#'";
+                        conditionBuilder << " AND UPPER(full_path) LIKE UPPER('%" + addEscapesToPattern(attributeValue) + "%') ESCAPE '#'";
                     }
-                    else if (name == "typeFilter")
+                    else if (attributeName == "typeFilter")
                     {
-                        if (value == "file")
+                        if (attributeValue == "file")
                         {
                             // File must be a regular file.
                             conditionBuilder << " AND meta_type = " << TSK_FS_META_TYPE_REG;
                         }
-                        else if (value == "dir")
+                        else if (attributeValue == "dir")
                         {
                             // File must be a directory.
                             conditionBuilder << " AND meta_type = " << TSK_FS_META_TYPE_DIR;
                         }
                         else
                         {
-                            std::wstringstream msg;
-                            msg << L"InterestingFilesModule ignored unrecognized typeFilter attribute value: " << value.c_str(); 
+                            std::stringstream msg;
+                            msg << "InterestingFilesModule::addPathAndTypeFilterOptions : ignored unrecognized '" << attributeValue << "' value of typefilter attribute of '" << Poco::XML::fromXMLString(conditionDefinition->nodeName()) << "' element"; 
                             LOGERROR(msg.str());
                         }
                     }
                     else
                     {
-                        std::wstringstream msg;
-                        msg << L"InterestingFilesModule ignored unrecognized " << Poco::XML::fromXMLString(conditionDefinition->nodeName()).c_str() << L" attribute: " << name.c_str(); 
+                        std::stringstream msg;
+                        msg << "InterestingFilesModule::addPathAndTypeFilterOptions : ignored unrecognized '" << attributeName << "' attribute of '" << Poco::XML::fromXMLString(conditionDefinition->nodeName()) << "' element"; 
                         LOGERROR(msg.str());
                     }
                 }
                 else
                 {
-                    std::wstringstream msg;
-                    msg << L"InterestingFilesModule ignored " << Poco::XML::fromXMLString(conditionDefinition->nodeName()).c_str() << L" " << name.c_str() << L" attribute without a value"; 
+                    std::stringstream msg;
+                    msg << "InterestingFilesModule::addPathAndTypeFilterOptions : ignored '" << attributeName << "' attribute without a value in '" << Poco::XML::fromXMLString(conditionDefinition->nodeName()) << "' element" ; 
                     LOGERROR(msg.str());
                 }
             }
@@ -170,8 +170,8 @@ namespace
         // as a folder name by a save interesting files module.
         if (setName.find_first_of("<>:\"/\\|?*") != std::string::npos)
         {
-            std::wstringstream msg;
-            msg << L"InterestingFilesModule encountered illegal INTERESTING_FILE_SET name attribute (contains file path character): " << setName.c_str();
+            std::stringstream msg;
+            msg << "InterestingFilesModule::isValidSetName : INTERESTING_FILE_SET 'name' attribute value '" << setName << "' contains file path character";
             LOGERROR(msg.str());
             return false;
         }
@@ -180,8 +180,8 @@ namespace
         // as a folder name by a save interesting files module.
         if (setName == (".") || setName == (".."))
         {
-            std::wstringstream msg;
-            msg << L"InterestingFilesModule encountered illegal INTERESTING_FILE_SET name attribute (is . or ..): " << setName.c_str();
+            std::stringstream msg;
+            msg << "InterestingFilesModule::isValidSetName : INTERESTING_FILE_SET 'name' attribute value '" << setName << "' is directory alias";
             LOGERROR(msg.str());
             return false;
         }
@@ -190,8 +190,8 @@ namespace
         static std::set<std::string> setNames;
         if (setNames.count(setName) != 0)
         {
-            std::wstringstream msg;
-            msg << L"InterestingFilesModule discarded duplicate INTERESTING_FILE_SET name definition: " << setName.c_str();
+            std::stringstream msg;
+            msg << "InterestingFilesModule::isValidSetName : discarded duplicate INTERESTING_FILE_SET name definition '" << setName << "'";
             LOGERROR(msg.str());
             return false;
         }
@@ -203,41 +203,40 @@ namespace
     // A helper function to turn an interesting files set definition into an InterestingFilesSet object.
     void compileInterestingFilesSet(const Poco::XML::Node *fileSetDefinition)
     {
-        // Create a counter for use in generating default names for file searches.
+        // Create a counter for use in generating default interesting file set names.
         static unsigned long defaultSetNumber = 1;
 
+        // Determine the name and description of the file set.
         InterestingFilesSet fileSet;
-
-        // Determine the name and description of the search.
         if (fileSetDefinition->hasAttributes())
         {
             Poco::AutoPtr<Poco::XML::NamedNodeMap> attributes = fileSetDefinition->attributes(); 
             for (unsigned long i = 0; i < attributes->length(); ++i)
             {
                 Poco::XML::Node *attribute = attributes->item(i);
-                const std::string &name = Poco::XML::fromXMLString(attribute->nodeName());                
-                const std::string &value = Poco::XML::fromXMLString(attribute->nodeValue());
-                if (!value.empty())
+                const std::string &attributeName = Poco::XML::fromXMLString(attribute->nodeName());                
+                const std::string &attributeValue = Poco::XML::fromXMLString(attribute->nodeValue());
+                if (!attributeValue.empty())
                 {
-                    if (name == "name")
+                    if (attributeName == "name")
                     {        
-                        fileSet.name = value;
+                        fileSet.name = attributeValue;
                     }
-                    else if (name == "description")
+                    else if (attributeName == "description")
                     {
-                        fileSet.description = value;
+                        fileSet.description = attributeValue;
                     }
                     else
                     {
-                        std::wstringstream msg;
-                        msg << L"InterestingFilesModule ignored unrecognized INTERESTING_FILE_SET attribute " << name.c_str(); 
+                        std::stringstream msg;
+                        msg << "InterestingFilesModule::compileInterestingFilesSet : ignored unrecognized INTERESTING_FILE_SET attribute '" << attributeName << "'"; 
                         LOGERROR(msg.str());
                     }
                 }
                 else
                 {
-                    std::wstringstream msg;
-                    msg << L"InterestingFilesModule ignored INTERESTING_FILE_SET " << name.c_str() << L" attribute without a value"; 
+                    std::stringstream msg;
+                    msg << "InterestingFilesModule::compileInterestingFilesSet : ignored INTERESTING_FILE_SET '" << attributeName << "' attribute without a value"; 
                     LOGERROR(msg.str());
                 }
             }
@@ -272,8 +271,8 @@ namespace
                     }
                     else
                     {
-                        std::wstringstream msg;
-                        msg << L"InterestingFilesModule ignored unrecognized INTERESTING_FILE_SET child element: " << conditionType.c_str(); 
+                        std::stringstream msg;
+                        msg << "InterestingFilesModulecompileInterestingFilesSet : ignored unrecognized INTERESTING_FILE_SET child element '" << conditionType << "'"; 
                         LOGERROR(msg.str());
                     }
                 }
@@ -286,8 +285,8 @@ namespace
             }
             else
             {
-                std::wstringstream msg;
-                msg << L"InterestingFilesModule ignored empty INTERESTING_FILE_SET element: " << fileSet.name.c_str(); 
+                std::stringstream msg;
+                msg << "InterestingFilesModulecompileInterestingFilesSet : ignored empty INTERESTING_FILE_SET element '" << fileSet.name << "'"; 
                 LOGERROR(msg.str());
             }
         }
@@ -334,7 +333,7 @@ extern "C"
     *
     * @param args Path of the configuration file that defines what files are 
     * interesting, may be set to the empty string.
-    * @return Always returns TskModule::OK since it is a reporting module. 
+    * @return Always returns TskModule::OK since it is a post-processing module. 
     */
     TSK_MODULE_EXPORT TskModule::Status initialize(const char* arguments)
     {
@@ -349,15 +348,15 @@ extern "C"
 
         if (configFilePath.empty())
         {
-            // Assume use of a config file with a default name in a default location.
+            // Assume use of default config file.
             std::stringstream pathBuilder;
             pathBuilder << GetSystemProperty(TskSystemProperties::MODULE_DIR) << Poco::Path::separator() << "InterestingFilesModule" << Poco::Path::separator() << "interesting_files.xml";
             configFilePath = pathBuilder.str();
         }
 
         // Log the config file path for reference in case of error.
-        std::wstringstream msg;
-        msg << L"InterestingFilesModule initialized with config file path: " << configFilePath.c_str();
+        std::stringstream msg;
+        msg << "InterestingFilesModule::initialize : configured with config file path '" << configFilePath << "'";
         LOGINFO(msg.str());
 
         // Open the config file.
@@ -381,23 +380,26 @@ extern "C"
                 }
                 catch (Poco::XML::SAXParseException &ex) 
                 {
-                    std::wstringstream msg;
-                    msg << L"InterestingFilesModule experienced an error parsing configuration file: " << ex.message().c_str();
+                    std::stringstream msg;
+                    msg << "InterestingFilesModule::initialize : exception parsing config file '" << configFilePath << "' : " << ex.displayText();
                     LOGERROR(msg.str());
                 }  
             }
             else
             {
-                LOGERROR(L"InterestingFilesModule could not open configuration file");
+                std::stringstream msg;
+                msg << "InterestingFilesModule::initialize : failed to open config file '" << configFilePath << "'";
+                LOGERROR(msg.str());
             }
         }
         else
         {
-            LOGERROR(L"InterestingFilesModule could not find configuration file");
+            std::stringstream msg;
+            msg << "InterestingFilesModule::initialize : could not find config file'" << configFilePath << "'";
+            LOGERROR(msg.str());
         }
 
-        // Always return OK when initializing a reporting/post-processing pipeline module 
-        // so the pipeline is not disabled by the presence of a non-functional module.
+        // Always return OK when initializing a reporting/post-processing pipeline module so the pipeline is not disabled by the presence of a non-functional module.
         return TskModule::OK;
     }
 
@@ -411,28 +413,17 @@ extern "C"
     {
         if (fileSets.empty())
         {
-            LOGERROR(L"InterestingFilesModule has no valid interesting file set definitions" );
+            LOGERROR("InterestingFilesModule::report : no valid interesting file set definitions");
             return TskModule::FAIL;
         }
-
-        LOGINFO(L"InterestingFilesModule search for interesting file set hits started");
 
         TskModule::Status returnCode = TskModule::OK;
         for (std::vector<InterestingFilesSet>::iterator fileSet = fileSets.begin(); fileSet != fileSets.end(); ++fileSet)
         {
-            std::wstringstream msg;
-            msg << L"InterestingFilesModule searching for hits for file set with name='" << (*fileSet).name.c_str() << L"' and description='" << (*fileSet).description.c_str() << L"'";
-            LOGINFO(msg.str());
-
             for (std::vector<string>::iterator condition = (*fileSet).conditions.begin(); condition != (*fileSet).conditions.end(); ++condition)
             {
                 try
                 {
-                    msg.str(L"");
-                    msg.clear();
-                    msg << L"InterestingFilesModule executing search condition='" << (*condition).c_str();
-                    LOGINFO(msg.str());
-
                     vector<uint64_t> fileIds = TskServices::Instance().getImgDB().getFileIds(*condition);
                     for (size_t i = 0; i < fileIds.size(); i++)
                     {
@@ -443,17 +434,14 @@ extern "C"
                 }
                 catch (TskException &ex)
                 {
-                    // Log the error and try the next file set, but signal that an error occurred with a FAIL
-                    // return code.
-                    std::wstringstream msg;
-                    msg << L"InterestingFilesModule experienced an error condition: " << ex.message().c_str();
+                    // Log the error and try the next file set, but signal that an error occurred with a FAIL return code.
+                    std::stringstream msg;
+                    msg << "InterestingFilesModule::report : exception searching for file set hits for condition '" << *condition << "' : " << ex.message();
                     LOGERROR(msg.str());
                     returnCode = TskModule::FAIL;
                 }
             }
         }
-
-        LOGINFO(L"InterestingFilesModule search for interesting file set hits finished");
 
         return returnCode;
     }
