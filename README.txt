@@ -76,7 +76,7 @@ An 'EXTENSION' element says search the end of file names for the element text.
 If the leading "." is omitted the module will add it. 
 
 Wildcard is supported in both 'NAME' and 'EXTENSION' elements. The asterisk
-characeter '*' is used to represent a match of zero or more characters.
+character '*' is used to represent a match of zero or more characters.
 
 'NAME' and 'EXTENSION' elements may be qualified with optional 'typeFilter'
 attributes. Valid values for 'typeFilter' are 'file' (for regular files) and 
