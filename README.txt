@@ -29,6 +29,12 @@ file sets in terms of search criteria.  Here is a sample:
 
 <?xml version="1.0" encoding="utf-8"?>
 <INTERESTING_FILES>
+    <INTERESTING_FILE_SET name="HTMLFilesType" description="Files with extension .htm*">
+        <EXTENSION typeFilter="file">.htm*</EXTENSION>
+    </INTERESTING_FILE_SET>
+    <INTERESTING_FILE_SET name="Password" description="Files with password in the name">
+        <NAME typeFilter="file">*password*</NAME>
+    </INTERESTING_FILE_SET>
     <INTERESTING_FILE_SET name="HTMLFiles" description="Files named file.htm or file.html">
         <NAME typeFilter="file">file.htm</NAME>
         <NAME typeFilter="file">file.html</NAME>
@@ -68,6 +74,9 @@ case insensitive match.  For example, the string "bomb" will not match "abomb".
 
 An 'EXTENSION' element says search the end of file names for the element text. 
 If the leading "." is omitted the module will add it. 
+
+Wildcard is supported in both 'NAME' and 'EXTENSION' elements. The asterisk
+character '*' is used to represent a match of zero or more characters.
 
 'NAME' and 'EXTENSION' elements may be qualified with optional 'typeFilter'
 attributes. Valid values for 'typeFilter' are 'file' (for regular files) and 
