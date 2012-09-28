@@ -14,6 +14,14 @@ This module is useful for identifying all files of a given
 type (based on extension) or given name or contained in a 
 directory of a given name. 
 
+DEPLOYMENT REQUIREMENTS
+
+This module requires a configuration file (discussed below).
+The location of the configuration file can be passed as an
+argument to the module. 
+If the location is not passed as an argument the module will 
+look for a file named "interesting_files.xml" in a folder named 
+"InterestingFilesModule" located in the modules folder.
 
 USAGE
 
