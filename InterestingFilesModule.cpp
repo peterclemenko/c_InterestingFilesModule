@@ -455,7 +455,7 @@ extern "C"
             {
                 // Use the default config file path.
                 Poco::Path configurationFilePath(Poco::Path::forDirectory(GetSystemProperty(TskSystemProperties::MODULE_DIR)));
-                configurationFilePath.pushDirectory(name());
+                configurationFilePath.pushDirectory(MODULE_NAME);
                 configurationFilePath.setFileName(DEFAULT_CONFIG_FILE_NAME);
                 configFilePath = configurationFilePath.toString();
             }
@@ -467,7 +467,8 @@ extern "C"
                 std::ifstream configStream(configFile.path().c_str());
                 if (configStream)
                 {
-                    Poco::AutoPtr<Poco::XML::Document> configDoc = Poco::XML::DOMParser().parse(&Poco::XML::InputSource(configStream));
+                    Poco::XML::InputSource inputSource(configStream);
+                    Poco::AutoPtr<Poco::XML::Document> configDoc = Poco::XML::DOMParser().parse(&inputSource);
                     Poco::AutoPtr<Poco::XML::NodeList> fileSetDefinitions = configDoc->getElementsByTagName(INTERESTING_FILE_SET_ELEMENT_TAG);
                     for (unsigned long i = 0; i < fileSetDefinitions->length(); ++i) 
                     {
