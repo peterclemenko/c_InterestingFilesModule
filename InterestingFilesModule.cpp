@@ -16,7 +16,6 @@
 
 // TSK Framework includes
 #include "tsk/framework/utilities/TskModuleDev.h"
-#include "framework.h"
 
 // Poco includes
 #include "Poco/String.h"
