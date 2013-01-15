@@ -454,7 +454,7 @@ extern "C"
             if (configFilePath.empty())
             {
                 // Use the default config file path.
-                Poco::Path configurationFilePath(Poco::Path::forDirectory(GetSystemProperty(TskSystemProperties::MODULE_DIR)));
+                Poco::Path configurationFilePath(Poco::Path::forDirectory(GetSystemProperty(TskSystemProperties::MODULE_CONFIG_DIR)));
                 configurationFilePath.pushDirectory(MODULE_NAME);
                 configurationFilePath.setFileName(DEFAULT_CONFIG_FILE_NAME);
                 configFilePath = configurationFilePath.toString();
