@@ -5,9 +5,13 @@ lib_LTLIBRARIES = libtskInterestingFilesModule.la
 libtskInterestingFilesModule_la_SOURCES = InterestingFilesModule.cpp
 libtskInterestingFilesModule_la_LIBADD = $(FW_LIBS)
 
-nobase_dist_data_DATA = tsk/InterestingFilesModule/*
+nobase_dist_data_DATA = tsk/InterestingFilesModule/interesting_files.xml
 
-bin_PROGRAMS = maybe_copy_configs
+bin_PROGRAMS = maybe_copy_configs setup_data
+
+setup_data:
+	-mkdir -p tsk/InterestingFilesModule
+	(cd tsk/InterestingFilesModule; ln -sf ../../interesting_files.xml .)
 
 MODULE_CONFIG_DIR = $(RUNTIME_MODULES_CONFIG_DIR)/InterestingFilesModule
 
