@@ -43,8 +43,18 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memset strtoul strtoull])
 
+# RUNTIME_MODULES_CONFIG_DIR
+AC_SUBST(RUNTIME_MODULES_CONFIG_DIR, "../../runtime/modules_config")
+
+# MODULES_ROOT_DIR is the tsk/framework/modules directory
+# MODULES_ROOT_DIR is relative to RUNTIME_MODULES_CONFIG_DIR/<module_name>
+# so that each module can do the following to populate config files to the runtime directory.
+#   mkdir -p $(RUNTIME_MODULES_CONFIG_DIR)/<module_name>
+#   (cd $(RUNTIME_MODULES_CONFIG_DIR)/<module_name>; ln -s $(MODULES_ROOT_DIR)/c_foobarModule/foobar_config.xml .)
+AC_SUBST(MODULES_ROOT_DIR, "../../../modules")
+
 # Check if the module is under tsk/framework/modules
-if test -f ../modules/Makefile.am; then
+if test -f ../../modules/Makefile.am; then
    AC_SUBST(FW_LIBS, "../../tsk/framework/libtskframework.la ../../../tsk/libtsk.la")
    AC_SUBST(TSK_INCLUDE, "-I../../..")
    AC_SUBST(FW_INCLUDE,  "-I../..")
