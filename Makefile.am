@@ -9,9 +9,7 @@ nobase_dist_data_DATA = tsk/InterestingFilesModule/interesting_files.xml
 
 bin_PROGRAMS = maybe_copy_configs setup_data
 
-setup_data: tsk/InterestingFilesModule/interesting_files.xml
-
-tsk/InterestingFilesModule/interesting_files.xml:
+setup_data:
 	-mkdir -p tsk/InterestingFilesModule
 	(cd tsk/InterestingFilesModule; ln -sf ../../interesting_files.xml .)
 
